@@ -13,12 +13,17 @@ class Player{
     this.y = lerp(this.y, this.targetY, 0.2);
   }
   
-  show(){
-    if(this.color == "blue")
-    {fill(0, 200, 255);}
-    else{
-      fill(255,0,0)
-}
+  show() {
+  noStroke();
+  if (this.color == "blue") fill(50, 200, 255); // neon blue
+  else fill(255, 50, 50);                       // neon red
+  
+  drawingContext.shadowBlur = 25;
+  drawingContext.shadowColor = this.color;
+  rect(this.x, this.y, this.size, this.size, 8);
+  drawingContext.shadowBlur = 0;
+  
+
     
     rect(this.x, this.y, this.size, this.size);
   }

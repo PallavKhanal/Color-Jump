@@ -6,11 +6,14 @@ class ScoreManager{
   }
   
   show(){
-    fill(0);
+    fill(255);
+    stroke(0);
     textSize(24);
     textAlign(LEFT, TOP);
     text("Score: " + this.currentScore, 20, 20);
     text("High Score: " + this.highScore, 20, 50);
+    drawingContext.shadowBlur = 20;
+    drawingContext.shadowColor = "cyan";
   }
   
   loadHighScore(){
@@ -32,6 +35,8 @@ class ScoreManager{
       this.highScore = this.currentScore;
       this.saveHighScore();
     }
+    
+    
     
   }
 }

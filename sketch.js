@@ -9,6 +9,12 @@ let gameOver = false;
 function setup() {
   createCanvas(1000, 700);
   
+  setupHome();
+  setupRules();
+  
+  drawingContext.shadowBlur = 20;
+  drawingContext.shadowColor = "cyan";
+  
   score = new ScoreManager();
   
   
@@ -36,13 +42,17 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background(0);
+  
+ 
   
   if(gameState == "home"){
     drawHome();
   }
+  else if (gameState == "rules") {
+  drawRules();
+  }
   else if(gameState == "playing"){
-    
     //platforms
   for (let p of platforms){
     p.show();
@@ -87,6 +97,9 @@ function draw() {
     homeButton.size(100, 40);
     homeButton.mousePressed(() => {
         gameState = "home";
+        setupHome();
+        drawHome();
+        
 
         // cleanup both buttons
         if (restartButton) {
@@ -142,6 +155,10 @@ function keyPressed(){
     if (key === 'C' || key === 'c') {
       player.switchColor();
     }
+  }
+  
+  else if (gameState === "rules") {
+  drawRules();
   }
 
   if (gameState === "gameOver") {
@@ -205,3 +222,17 @@ function restartGame() {
     loop(); 
     gameState = "playing"; 
 }
+
+function styleButton(btn, x, y) {
+  btn.position(x, y);
+  btn.size(160, 50);
+  btn.style('background-color', 'black');
+  btn.style('color', '#0ff');
+  btn.style('font-size', '18px');
+  btn.style('border', '2px solid #0ff');
+  btn.style('border-radius', '12px');
+  btn.style('box-shadow', '0 0 10px #0ff');
+  btn.mouseOver(() => btn.style('box-shadow', '0 0 20px #0ff'));
+  btn.mouseOut(() => btn.style('box-shadow', '0 0 10px #0ff'));
+}
+

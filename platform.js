@@ -6,8 +6,9 @@ class Platform {
     this.h = h;
   }
   
-  show(){
-    fill(100);
-    rect(this.x, this.y, this.w, this.h);
+  show() {
+  noStroke();
+  fill(50); // dark grey
+  rect(this.x, this.y, this.w, this.h);
   }
 }
