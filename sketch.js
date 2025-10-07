@@ -5,10 +5,21 @@ let platforms = [];
 let restartButton;
 let homeButton;
 let gameOver = false;
+let bgMusic;
+let jumpSound;
+
+function preload() {
+  bgMusic = loadSound('bgMusic.mp3');
+  jumpSound = loadSound('jump.mp3');
+  blueUp = loadImage('blueUp.png');
+  blueDown = loadImage('blueDown.png');
+  redUp = loadImage('redUp.png');
+  redDown = loadImage('redDown.png');
+}
 
 function setup() {
   createCanvas(1000, 700);
-  
+
   setupHome();
   setupRules();
   
@@ -43,7 +54,7 @@ function setup() {
 
 function draw() {
   background(0);
-  
+
  
   
   if(gameState == "home"){
@@ -151,6 +162,11 @@ function keyPressed(){
   if (gameState === "playing") {
     if (key === ' ') {
       player.switchPlatforms(platforms);
+      
+      if (jumpSound && !jumpSound.isPlaying()) {
+        jumpSound.setVolume(0.2);
+        jumpSound.play();
+      }
     }
     if (key === 'C' || key === 'c') {
       player.switchColor();
@@ -190,6 +206,11 @@ function restartGame() {
         restartButton.remove();
         restartButton = null;
     }
+    
+    if (bgMusic && !bgMusic.isPlaying()) {
+    bgMusic.setVolume(0.2);
+    bgMusic.loop();
+  }
   
    if (homeButton) {
         homeButton.remove();

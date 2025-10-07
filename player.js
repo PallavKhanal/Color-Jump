@@ -1,49 +1,63 @@
-class Player{
-  constructor(x, y){
+class Player {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
     this.size = 40;
     this.targetY = y;
     this.speed = 5;
     this.color = "blue";
-    
-  }
-  
-  update(){
-    this.y = lerp(this.y, this.targetY, 0.2);
-  }
-  
-  show() {
-  noStroke();
-  if (this.color == "blue") fill(50, 200, 255); // neon blue
-  else fill(255, 50, 50);                       // neon red
-  
-  drawingContext.shadowBlur = 25;
-  drawingContext.shadowColor = this.color;
-  rect(this.x, this.y, this.size, this.size, 8);
-  drawingContext.shadowBlur = 0;
-  
+    this.onUpper = false;
 
-    
-    rect(this.x, this.y, this.size, this.size);
+    // animation control
+    this.currentFrame = 0;
+    this.lastSwitchTime = 0;
+    this.frameDelay = 300; // 0.3 seconds
   }
-  
-  switchPlatforms(platforms){
-    if(this.targetY === platforms[1].y - this.size){
-       this.targetY = platforms[0].y + platforms[0].h;
+
+  update() {
+    // Smooth transition between platforms
+    this.y = lerp(this.y, this.targetY, 0.2);
+
+    // handle sprite animation
+    if (millis() - this.lastSwitchTime > this.frameDelay) {
+      this.currentFrame = 1 - this.currentFrame; // toggles 0 ↔ 1
+      this.lastSwitchTime = millis();
     }
-    else if(this.targetY === platforms[0].y + platforms[0].h){ 
+  }
+
+  show() {
+    // Choose correct image based on color and animation frame
+    let img;
+    if (this.color === "blue") {
+      img = this.currentFrame === 0 ? blueUp : blueDown;
+    } else {
+      img = this.currentFrame === 0 ? redUp : redDown;
+    }
+
+    push();
+    imageMode(CENTER);
+    translate(this.x + this.size / 2, this.y + this.size / 2);
+
+    // Flip vertically if on upper platform
+    if (this.onUpper) scale(1, -1);
+
+    image(img, 0, 0, this.size, this.size);
+    pop();
+  }
+
+  switchPlatforms(platforms) {
+    if (this.targetY === platforms[1].y - this.size) {
+      // Going up
+      this.targetY = platforms[0].y + platforms[0].h;
+      this.onUpper = true;
+    } else if (this.targetY === platforms[0].y + platforms[0].h) {
+      // Going down
       this.targetY = platforms[1].y - this.size;
+      this.onUpper = false;
     }
   }
-  
-  switchColor(){
-    if(this.color == "red")
-      {
-        this.color = "blue";
-      }
-    else{
-      this.color = "red";
-    }
+
+  switchColor() {
+    this.color = this.color === "red" ? "blue" : "red";
   }
 }
